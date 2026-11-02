@@ -1,0 +1,16 @@
+# Copy to .github/workflows/monitor.yml in the site's GitHub repository.
+# Runs every Monday 8am NZ time; GitHub emails the repo owner when it fails.
+name: Weekly site check
+on:
+  schedule:
+    - cron: '0 20 * * 0'   # Sunday 20:00 UTC = Monday 8-9am NZ
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node ops/check-site.js "${{ vars.SITE_URL }}"
